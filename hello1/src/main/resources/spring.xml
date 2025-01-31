@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--    ver2 start-->
+    <context:component-scan base-package="com.xs.hello1"></context:component-scan>
+<!--    ver2 end-->
+
+
+
+
+
+
+
+
+
+
+<!--  ver1 start:  依赖声明。spring 帮助我们实例化对象，并管理-->
+<!--    <bean class="com.xs.hello1.service.UserService">-->
+<!--        <property name="userDao" ref="userDao"></property>-->
+<!--    </bean>-->
+<!--    <bean class="com.xs.hello1.dao.UserDao" name="userDao"></bean>-->
+<!--    ver1 end-->
+</beans>
