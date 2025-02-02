@@ -224,6 +224,47 @@ AOP：Aspect Oriented Programming
 
 切面：主要是“增强”作用。在不改变原有代码的基础上进行增强（额外运行“切面”中的代码）
 
+启用 AOP，需要添加注解 `@EnableAspectJAutoProxy`，否则， AOP 功能无法使用。
+
+不过，如果**启动类和切面代码位于同一个包**中，则默认可以使用。
+原因是：启动类中有 @SpringBootApplication 注解，该注解中，此时，自动加上了 `@EnableAspectJAutoProxy` 注解。
+
+```java
+// @SpringBootApplication 注解中，自动启用了 @EnableAspectJAutoProxy
+@SpringBootApplication
+public class MyAopApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyAopApplication.class, args);
+    }
+}
+```
+
+即使如此，真正使用时，建议还是加上 `@EnableAspectJAutoProxy` 注解。
+
+```java
+package com.exa_aop.aopService;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@SpringBootTest(classes = ExaAopApplicationTests.class)
+@ComponentScan
+@EnableAspectJAutoProxy // -->启用 AOP 代理
+public class ExaAopApplicationTests {
+
+    @Test
+    public void test1(@Autowired UserService userService) {
+        userService.getUserList();
+        System.out.printf("end...\n");
+    }
+}
+```
+
+以上，是针对 springboot。如果是 spring，对应注解是必须要加的。
+
 
 
 
