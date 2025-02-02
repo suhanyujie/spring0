@@ -194,3 +194,36 @@ public class TestBeanLifetime {
 
 需要注意的是，springboot 中，当 jvm 进程结束后，会自动调用 ioc 容器的销毁方法 `close`。
 而在 spring 中，则需要手动调用销毁方法。
+
+## 循环依赖
+在 spring 中，可以进行循环依赖。
+
+而在 springboot 中，默认情况下，循环依赖被认为是一种不合理的设计，因此会报错。
+
+解决方式 1:
+
+可以通过增加特殊的配置项，达到支持的目的：
+
+```xml
+# 放开循环依赖的限制
+spring.main.allow-circular-references = true
+```
+
+不过，即使如此，循环依赖也是不建议使用的。
+
+解决方式 2:
+
+调整代码的设计和组织，独立出相应的逻辑。
+
+解决方式 3:
+
+通过延迟注入的方式也可以解决。
+
+## SpringAOP 面向切面编程
+AOP：Aspect Oriented Programming
+
+切面：主要是“增强”作用。在不改变原有代码的基础上进行增强（额外运行“切面”中的代码）
+
+
+
+
