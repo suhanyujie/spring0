@@ -8,4 +8,8 @@ public class UserService {
     public void getUserList() {
 
     }
+
+    public void updateUser(Integer uid) {
+        System.out.printf("uid: %d \n", uid);
+    }
 }

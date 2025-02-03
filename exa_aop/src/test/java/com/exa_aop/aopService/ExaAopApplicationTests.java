@@ -14,6 +14,7 @@ public class ExaAopApplicationTests {
     @Test
     public void test1(@Autowired UserService userService) {
         userService.getUserList();
+        userService.updateUser(1);
         System.out.printf("end...\n");
     }
 }

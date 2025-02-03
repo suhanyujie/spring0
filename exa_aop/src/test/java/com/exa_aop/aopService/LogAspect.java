@@ -1,15 +1,17 @@
 package com.exa_aop.aopService;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Component
-@Aspect
+@Aspect  // 标记为切面类
 public class LogAspect {
 
-    // @Around：环绕通知
+    // @Around：环绕通知。“通知”类型之一。
     // execution() 中写“切点表达式”
     @Around("execution(* com.exa_aop.aopService.UserService.*(..))")
     public void log(ProceedingJoinPoint proceedingJoinPoint) {
@@ -24,5 +26,13 @@ public class LogAspect {
         long t2 = System.currentTimeMillis();
 
         System.out.printf("time consume: %d s \n", (t2 - t1));
+    }
+
+    // “前置通知”
+    @Before("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void beforeFn(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.printf("%s \t %s \n", methodName, args);
     }
 }

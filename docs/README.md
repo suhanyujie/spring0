@@ -265,6 +265,47 @@ public class ExaAopApplicationTests {
 
 以上，是针对 springboot。如果是 spring，对应注解是必须要加的。
 
+通过 `@Aspect` 可将一个类标记为切面类：
 
+```java
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 
+@Component
+@Aspect  // 标记为切面类
+public class LogAspect {
 
+    // @Around：环绕通知。“通知”类型之一。
+    // execution() 中写“切点表达式”
+    @Around("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void log(ProceedingJoinPoint proceedingJoinPoint) {
+        long t1 = System.currentTimeMillis();
+
+        // 执行具体的方法、逻辑
+        try {
+            proceedingJoinPoint.proceed();
+        } catch (Throwable e) {
+            System.out.println("fn exec error:" + e.getMessage());
+        }
+        long t2 = System.currentTimeMillis();
+
+        System.out.printf("time consume: %d s \n", (t2 - t1));
+    }
+}
+```
+
+通过特定注解，将方法设定为特定的执行动作。一般包含以下几种类型：
+
+- 环绕通知 `@Around`：可以把代码增加在目标方法的任意地方，更通用
+- 前置通知 `@Before`：目标方法之前执行
+- 后置通知 `@After`：目标方法之后执行
+- 异常通知 `@AfterThrowing`：目标方法出现了异常时执行
+- 返回通知 `@AfterReturning`：目标方法返回值时执行
+
+**切点**：通过“切点表达式”，设定代码要切入到哪些方法中。
+
+**连接点**：“通知”和目标方法的一个桥梁。例如：上方示例代码中的 `proceedingJoinPoint` 对象。
+
+ 
