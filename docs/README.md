@@ -302,10 +302,71 @@ public class LogAspect {
 - 前置通知 `@Before`：目标方法之前执行
 - 后置通知 `@After`：目标方法之后执行
 - 异常通知 `@AfterThrowing`：目标方法出现了异常时执行
-- 返回通知 `@AfterReturning`：目标方法返回值时执行
+- 返回通知 `@AfterReturning`：目标方法 return 之后执行
 
 **切点**：通过“切点表达式”，设定代码要切入到哪些方法中。
 
 **连接点**：“通知”和目标方法的一个桥梁。例如：上方示例代码中的 `proceedingJoinPoint` 对象。
 
- 
+### “返回通知”的使用
+“返回通知”对应的注解是 `@AfterReturning`，用于被增强的方法执行之后，执行的逻辑。例如有如下定义的增强代码：
+
+```java
+@AfterReturning(value="execution(* com.exa_aop.aopService.UserService.*(..))", returning = "returnValue")
+public void afterReturningFn(JoinPoint joinPoint, Object returnValue) {
+    String methodName = joinPoint.getSignature().getName();
+    System.out.printf("afterReturningFn %s \t return: %s \n", methodName, returnValue);
+}
+```
+
+注解中，我们不仅可以指定“切点表达式”，还可以通过参数名，指定其他注解参数，如上方代码所示的 `returning` 参数名。
+
+而且 `returning` 的值需要与增强方法的形参对应 `Object returnValue`。
+
+### “异常通知”的使用
+“异常通知” 是在方法抛出异常时，才会执行。如果没有发生异常，则不会执行。
+
+```java
+@AfterThrowing("execution(* com.exa_aop.aopService.UserService.*(..))")
+public void afterThrowing1(JoinPoint joinPoint) {
+    String methodName = joinPoint.getSignature().getName();
+    System.out.printf("afterThrowing1 %s \t %s \n", methodName);
+}
+```
+
+需要注意的是，当“异常通知”执行时，意味着“返回通知”不会执行。
+
+此外，“异常通知”对应的增强代码中，可以在注解中按需要增加参数：
+
+```java
+@AfterThrowing(value = "execution(* com.exa_aop.aopService.UserService.*(..))", throwing = "exceptionObj")
+public void afterThrowing2(JoinPoint joinPoint, Exception exceptionObj) {
+    String methodName = joinPoint.getSignature().getName();
+    System.out.printf("afterThrowing2 %s \t %s \n", methodName, exceptionObj.getMessage());
+}
+```
+
+如上方所示，可以拿到对应的异常对象。
+
+### 关于“后置通知”
+“后置通知” 类似于 try 表达式中的 finally 部分的表达式。
+
+```java
+public void trySomeFn1() {
+    try {
+        throw new Exception("err message 1002");
+    } catch (Exception e) {
+        System.out.printf("trySomeFn1 catch\n");
+    } finally {
+        System.out.printf("trySomeFn1 finally\n");
+    }
+}
+```
+
+### 切点表达式
+
+![](./images1/spring-qiedian-expr1.png)
+
+包名中，`..` 可以代表任意层级（包名）。如：`execution(* com..UserService.*(..))`，则可以表示 `execution(* com.exa_aop.aopService.UserService.*(..))`
+
+

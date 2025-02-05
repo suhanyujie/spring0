@@ -2,10 +2,10 @@ package com.exa_aop.aopService;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 @Aspect  // 标记为切面类
@@ -33,6 +33,32 @@ public class LogAspect {
     public void beforeFn(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
-        System.out.printf("%s \t %s \n", methodName, args);
+        System.out.printf("beforeFn %s \t %s \n", methodName, args);
+    }
+
+    @AfterReturning(value="execution(* com.exa_aop.aopService.UserService.*(..))", returning = "returnValue")
+    public void afterReturningFn(JoinPoint joinPoint, Object returnValue) {
+        String methodName = joinPoint.getSignature().getName();
+        System.out.printf("afterReturningFn %s \t return: %s \n", methodName, returnValue);
+    }
+
+    @After("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void afterFn(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.printf("afterFn %s \t %s \n", methodName, Arrays.toString(args));
+    }
+
+    @AfterThrowing("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void afterThrowing1(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        System.out.printf("afterThrowing1 %s \t \n", methodName);
+    }
+
+
+    @AfterThrowing(value = "execution(* com.exa_aop.aopService.UserService.*(..))", throwing = "exceptionObj")
+    public void afterThrowing2(JoinPoint joinPoint, Exception exceptionObj) {
+        String methodName = joinPoint.getSignature().getName();
+        System.out.printf("afterThrowing2 %s \t %s \n", methodName, exceptionObj);
     }
 }

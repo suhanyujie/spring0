@@ -17,4 +17,16 @@ public class ExaAopApplicationTests {
         userService.updateUser(1);
         System.out.printf("end...\n");
     }
+
+    @Test
+    public void testAfterReturning(@Autowired UserService userService) {
+        userService.getUserNameById(1);
+        System.out.printf("end...\n");
+    }
+
+    @Test
+    public void testThrowing(@Autowired UserService userService) {
+        userService.getUserInfoByIdForThrowError(1);
+        System.out.printf("end...\n");
+    }
 }
