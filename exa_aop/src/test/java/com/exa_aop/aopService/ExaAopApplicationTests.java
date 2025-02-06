@@ -29,4 +29,9 @@ public class ExaAopApplicationTests {
         userService.getUserInfoByIdForThrowError(1);
         System.out.printf("end...\n");
     }
+
+    @Test
+    public void testAnnPointcut1(@Autowired ProjectService projectService) {
+        projectService.edit();
+    }
 }

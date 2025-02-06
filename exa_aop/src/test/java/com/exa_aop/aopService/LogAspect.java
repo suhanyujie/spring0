@@ -61,4 +61,6 @@ public class LogAspect {
         String methodName = joinPoint.getSignature().getName();
         System.out.printf("afterThrowing2 %s \t %s \n", methodName, exceptionObj);
     }
+
+
 }

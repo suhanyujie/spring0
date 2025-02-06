@@ -369,4 +369,98 @@ public void trySomeFn1() {
 
 包名中，`..` 可以代表任意层级（包名）。如：`execution(* com..UserService.*(..))`，则可以表示 `execution(* com.exa_aop.aopService.UserService.*(..))`
 
+#### 切点表达式的引用
+为了避免在多个地方写同样的切点表达式,可以通过声明一个"空"方法,并加上注解 @Pointcut 可以实现一个地方编写,其他任意地方引用的效果.
+
+```java
+@Component
+@Aspect
+public class MyPointCut {
+    @Pointcut("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void testExecPointCut1(){}
+
+    // “前置通知”.只需要引用 `testExecPointCut1()` 即可
+    @Before("testExecPointCut1()")
+    public void beforeFn(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.printf("beforeFn %s \t %s \n", methodName, args);
+    }
+}
+```
+
+"切点标识符"除了 `execution` 还有其他的,比如: 
+- `within`
+  - `within(包名, 类名?)` (`?` 表示可选项)
+  - 只能匹配到类级别,粒度较粗
+- `annotation`
+  - `@annotation(com.exa_aop.aopService.UserService.*(..))`
+  - 可以定位到具体的方法,粒度更细
+- `this`
+- `target`
+
+切点表达式中,还可以使用逻辑运算符, 例如 `&&`:
+
+```java
+@Component
+@Aspect
+public class MyPointCut {
+    @Pointcut("execution(* com.exa_aop.aopService.UserService.*(..))")
+    public void testExecPointCut1(){}
+
+    @Pointcut("within(com.exa_aop.aopService.ProjectService)")
+    public void testExecPointCut2(){}
+
+    // “前置通知”
+    @Before("testExecPointCut1()")
+    public void beforeFn(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.printf("MyPointCut.beforeFn %s \t %s \n", methodName, args);
+    }
+
+    // --> 使用逻辑运算符,连接多个切点表达式
+    @Before("testExecPointCut1() && testExecPointCut2()")
+    public void beforeFn2(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        System.out.printf("MyPointCut.beforeFn2 %s \t %s \n", methodName, args);
+    }
+}
+```
+
+可以自己定义一个注解,然后针对特定方法使用自己定义的注解,使用这种方式,对匹配到的方法进行切入:
+
+```java
+/// exa_aop/src/test/java/com/exa_aop/aopService/AnnLog1.java
+// 针对所有使用了 `@AnnLog1` 注解的方法,进行切入
+@Pointcut("@annotation(AnnLog1)")
+public void testExecPointCut3(){}
+
+@Before("testExecPointCut1() && testExecPointCut2() && testExecPointCut3()")
+public void beforeFn2(JoinPoint joinPoint) {
+    String methodName = joinPoint.getSignature().getName();
+    Object[] args = joinPoint.getArgs();
+    System.out.printf("MyPointCut.beforeFn2 %s \t %s \n", methodName, args);
+}
+
+/// exa_aop/src/test/java/com/exa_aop/aopService/ProjectService.java
+@AnnLog1("修改 project")
+public void edit() {
+    System.out.println("edit...");
+}
+```
+
+如果在编写增强代码时,需要获取自定义注解对应的参数时,则以上的方式需要有所调整:
+
+```java
+///  exa_aop/src/test/java/com/exa_aop/aopService/MyPointCut.java
+@Before("@annotation(log)")
+public void beforeFn3(JoinPoint joinPoint, AnnLog1 log) {
+    String methodName = joinPoint.getSignature().getName();
+    Object[] args = joinPoint.getArgs();
+    System.out.printf("MyPointCut.beforeFn3 methodName: %s, 注解的参数值: %s \n", methodName, log.value());
+}
+```
+
 
