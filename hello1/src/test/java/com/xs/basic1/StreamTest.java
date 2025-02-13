@@ -14,6 +14,7 @@ public class StreamTest {
                 .filter(ele -> ele % 2 == 0)
                 .sum();
         System.out.println(res);
+
     }
 
     public static boolean isNumber(String input) {
