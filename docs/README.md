@@ -18,6 +18,28 @@
 </project>
 ```
 
+增加子模块声明：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--   
+    略...
+    -->
+
+    <modules>
+      <module>hello1</module>
+      <module>exa_aop</module>
+    </modules>
+    
+    <!--   
+    略...
+    -->
+</project>
+```
+
+
 后续基于当前父模块，创建多个子模块进行开发。如下图所示：
 
 ![springProjectDirLayout1.png](images1/springProjectDirLayout1.png)![](./docs/images1/)

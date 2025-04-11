@@ -14,7 +14,9 @@
     <name>spring0</name>
     <description>spring0</description>
     <url/>
+    <!-- 手动添加 1 -->
     <packaging>pom</packaging>
+    <!-- 手动添加 2 -->
     <modules>
         <module>hello1</module>
         <module>exa_aop</module>
