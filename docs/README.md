@@ -39,6 +39,31 @@
 </project>
 ```
 
+需要注意的是对应的子模块中的 pom 文件中的 parent 部分 artifactId 是否指向父模块：
+
+```xml
+<!-- 子模块的 pom： -->
+<!--  略... -->
+<parent>
+  <groupId>com.xs</groupId>
+  <artifactId>spring0</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</parent>
+<!--  略... -->
+
+<!-- 父模块的 pom： -->
+<!--  略... -->
+<parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>3.4.2</version>
+  <relativePath/> <!-- lookup parent from repository -->
+</parent>
+<groupId>com.xs</groupId>
+<artifactId>spring0</artifactId>
+<version>0.0.1-SNAPSHOT</version>
+<!--  略... -->
+```
 
 后续基于当前父模块，创建多个子模块进行开发。如下图所示：
 
