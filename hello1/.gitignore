@@ -29,5 +29,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+hello1/src/main/resources/application-dev.properties
+
 ### VS Code ###
 .vscode/
