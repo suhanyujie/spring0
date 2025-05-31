@@ -1,6 +1,12 @@
 package com.xs.hello1.unserialize;
 
+import com.xs.hello1.dao.UserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Model1 {
+    Logger logger = LoggerFactory.getLogger(Model1.class);
+
     private String name;
     private String age;
     private String desc;
@@ -30,7 +36,7 @@ public class Model1 {
     }
 
     public String getUndefinedAttr1() {
-        System.out.printf("getUndefinedAttr1 step1001 \n");
+        logger.info("getUndefinedAttr1 step1001 \n");
         return desc;
     }
 }
